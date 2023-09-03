@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recebimento de Documentos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        form {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 5px;
+            margin-top: 5px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        #status-message {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Envie seus documentos</h1>
+    <form id="document-form">
+        <label for="carteira-trabalho">Carteira de Trabalho:</label>
+        <input type="file" id="carteira-trabalho" name="carteira-trabalho" accept=".pdf, .jpg, .png" required><br>
+
+        <label for="cnh">CNH:</label>
+        <input type="file" id="cnh" name="cnh" accept=".pdf, .jpg, .png" required><br>
+
+        <label for="comprovante-endereco">Comprovante de Endereço:</label>
+        <input type="file" id="comprovante-endereco" name="comprovante-endereco" accept=".pdf, .jpg, .png" required><br>
+
+        <label for="numero-pis">Número do PIS:</label>
+        <input type="text" id="numero-pis" name="numero-pis" required><br>
+
+        <label for="conta-bancaria">Conta Bancária (não em banco digital):</label>
+        <input type="text" id="conta-bancaria" name="conta-bancaria" required><br>
+
+        <button type="submit" id="send-button">Enviar Documentos</button>
+    </form>
+
+    <div id="status-message"></div>
+
+    <script>
+        function sendEmail(data) {
+          // Cria um novo objeto e-mail
+          const email = new Email();
+
+          // Define o assunto do e-mail
+          email.subject = "Documentos enviados";
+
+          // Define o corpo do e-mail
+          email.body = "Os documentos foram enviados com sucesso.";
+
+          // Anexa os arquivos ao e-mail
+          for (const [name, file] of Object.entries(data)) {
+            email.attach(file);
+          }
+
+          // Envia o e-mail
+          email.send();
+        }
+
+        const form = document.getElementById("document-form");
+
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          // Obtém os dados do formulário
+          const data = form.serialize();
+
+          // Envia os dados por e-mail
+          sendEmail(data);
+
+          // Altera o texto do botão para "Documentos enviados"
+          document.getElementById("send-button").textContent = "Documentos enviados";
+
+          // Altera a cor do botão para verde
+          document.getElementById("send-button").style.backgroundColor = "#00FF00";
+        });
+    </script>
+</body>
+</html>
